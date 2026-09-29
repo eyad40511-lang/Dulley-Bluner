@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dulluey tasks</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding-bottom: 90px;
+            font-family: Arial, sans-serif;
+            background: #f3f8f5;
+            color: #173b2a;
+        }
+
+        .header {
+            background:
+                linear-gradient(
+                    135deg,
+                    #16a34a,
+                    #087f3d
+                );
+
+            color: white;
+
+            padding: 30px 20px 35px;
+
+            border-radius:
+                0 0 30px 30px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin: 0;
+            opacity: .9;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .progress-card {
+            background: white;
+            padding: 22px;
+            border-radius: 22px;
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,.07);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-header h2 {
+            margin: 0;
+        }
+
+        .percentage {
+            color: #16a34a;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .progress-text {
+            color: #718078;
+            margin: 12px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 13px;
+            background: #dcefe3;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background:
+                linear-gradient(
+                    90deg,
+                    #16a34a,
+                    #087f3d
+                );
+            border-radius: 20px;
+            transition: width .4s;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns:
+                repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .stat {
+            background: white;
+            padding: 16px 8px;
+            border-radius: 17px;
+            text-align: center;
+            box-shadow:
+                0 5px 18px
+                rgba(0,0,0,.05);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #16a34a;
+        }
+
+        .stat-label {
+            margin-top: 5px;
+            color: #718078;
+            font-size: 13px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .button {
+            background: white;
+            padding: 22px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #173b2a;
+            font-weight: bold;
+            box-shadow:
+                0 6px 20px
+                rgba(0,0,0,.06);
+        }
+
+        .button span {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .add {
+            background: #16a34a;
+            color: white;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #718078;
+            margin-top: 20px;
+        }
+
+        .bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            background: white;
+
+            display: flex;
+            justify-content: space-around;
+
+            padding: 14px;
+
+            box-shadow:
+                0 -5px 20px
+                rgba(0,0,0,.08);
+
+            z-index: 100;
+        }
+
+        .bottom a {
+            text-decoration: none;
+            color: #16a34a;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <header class="header">
+
+        <h1>
+            Dulley Bluner
+        </h1>
+
+        <p>
+            نظّم يومك وأنجز أهدافك
+        </p>
+
+    </header>
+
+
+    <main class="container">
+
+
+        <section class="progress-card">
+
+            <div class="progress-header">
+
+                <h2>
+                    تقدم اليوم
+                </h2>
+
+                <span
+                    id="percentage"
+                    class="percentage"
+                >
+                    0%
+                </span>
+
+            </div>
+
+
+            <p
+                id="progressText"
+                class="progress-text"
+            >
+                لا توجد مهام حتى الآن
+            </p>
+
+
+            <div class="progress-bar">
+
+                <div
+                    id="progress"
+                    class="progress"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <section class="stats">
+
+
+            <div class="stat">
+
+                <div
+                    id="totalTasks"
+                    class="stat-number"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    كل المهام
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div
+                    id="completedTasks"
+                    class="stat-number"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    مكتملة
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div
+                    id="remainingTasks"
+                    class="stat-number"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    متبقية
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <section class="buttons">
+
+
+            <a
+                class="button"
+                href="tasks.html"
+            >
+
+                <span>
+                    📋
+                </span>
+
+                كل المهام
+
+            </a>
+
+
+            <a
+                class="button add"
+                href="add-task.html"
+            >
+
+                <span>
+                    ➕
+                </span>
+
+                إضافة مهمة
+
+            </a>
+
+
+            <a
+                class="button"
+                href="settings.html"
+            >
+
+                <span>
+                    ⚙️
+                </span>
+
+                الإعدادات
+
+            </a>
+
+
+            <a
+                class="button"
+                href="about.html"
+            >
+
+                <span>
+                    ℹ️
+                </span>
+
+                عن التطبيق
+
+            </a>
+
+
+        </section>
+
+
+    </main>
+
+
+    <nav class="bottom">
+
+        <a href="index.html">
+            🏠 الرئيسية
+        </a>
+
+        <a href="tasks.html">
+            📋 المهام
+        </a>
+
+        <a href="add-task.html">
+            ➕ إضافة
+        </a>
+
+        <a href="settings.html">
+            ⚙️ الإعدادات
+        </a>
+
+    </nav>
+
+
+    <script>
+
+
+        function getTasks() {
+
+            const saved =
+                localStorage.getItem(
+                    "dailyTasks"
+                );
+
+
+            if (!saved) {
+
+                return [];
+
+            }
+
+
+            try {
+
+                return JSON.parse(saved);
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+
+        function updateDashboard() {
+
+
+            const tasks =
+                getTasks();
+
+
+            const total =
+                tasks.length;
+
+
+            const completed =
+                tasks.filter(
+                    function(task) {
+
+                        return task.completed === true;
+
+                    }
+                ).length;
+
+
+            const remaining =
+                total - completed;
+
+
+            let percentage = 0;
+
+
+            if (total > 0) {
+
+                percentage =
+                    Math.round(
+                        (completed / total) * 100
+                    );
+
+            }
+
+
+            document
+                .getElementById(
+                    "totalTasks"
+                )
+                .textContent = total;
+
+
+            document
+                .getElementById(
+                    "completedTasks"
+                )
+                .textContent = completed;
+
+
+            document
+                .getElementById(
+                    "remainingTasks"
+                )
+                .textContent = remaining;
+
+
+            document
+                .getElementById(
+                    "percentage"
+                )
+                .textContent =
+                    percentage + "%";
+
+
+            document
+                .getElementById(
+                    "progress"
+                )
+                .style.width =
+                    percentage + "%";
+
+
+            const progressText =
+                document.getElementById(
+                    "progressText"
+                );
+
+
+            if (total === 0) {
+
+                progressText.textContent =
+                    "لا توجد مهام حتى الآن";
+
+            } else {
+
+                progressText.textContent =
+                    "أنجزت " +
+                    completed +
+                    " من " +
+                    total +
+                    " مهام";
+
+            }
+
+        }
+
+
+
+        updateDashboard();
+
+
+    </script>
+
+
+</body>
+
+</html>

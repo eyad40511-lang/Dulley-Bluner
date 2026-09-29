@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>إضافة مهمة - Daily Tasks</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding-bottom: 90px;
+            font-family: Arial, sans-serif;
+            background: #f3f8f5;
+            color: #173b2a;
+        }
+
+        .header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #16a34a,
+                    #087f3d
+                );
+
+            color: white;
+
+            padding: 28px 20px;
+
+            border-radius:
+                0 0 30px 30px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 0;
+            opacity: .9;
+        }
+
+        .container {
+
+            max-width: 600px;
+
+            margin: auto;
+
+            padding: 20px;
+        }
+
+        .card {
+
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 7px 22px
+                rgba(0,0,0,.06);
+        }
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+
+            width: 100%;
+
+            padding: 15px;
+
+            border: 1px solid #d7e7dd;
+
+            border-radius: 14px;
+
+            font-size: 16px;
+
+            margin-bottom: 18px;
+
+            outline: none;
+
+            font-family: Arial, sans-serif;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+
+            border-color: #16a34a;
+        }
+
+        textarea {
+
+            resize: vertical;
+
+            min-height: 100px;
+        }
+
+        .save-button {
+
+            width: 100%;
+
+            border: none;
+
+            background: #16a34a;
+
+            color: white;
+
+            padding: 16px;
+
+            border-radius: 15px;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .save-button:active {
+
+            transform: scale(.98);
+        }
+
+        .message {
+
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 14px;
+
+            border-radius: 13px;
+
+            text-align: center;
+
+            font-weight: bold;
+        }
+
+        .success {
+
+            background: #dcfce7;
+
+            color: #166534;
+        }
+
+        .error {
+
+            background: #fee2e2;
+
+            color: #b91c1c;
+        }
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 16px;
+
+            color: #16a34a;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .bottom {
+
+            position: fixed;
+
+            bottom: 0;
+
+            left: 0;
+
+            right: 0;
+
+            background: white;
+
+            display: flex;
+
+            justify-content: space-around;
+
+            padding: 14px;
+
+            box-shadow:
+                0 -5px 20px
+                rgba(0,0,0,.08);
+
+            z-index: 100;
+        }
+
+        .bottom a {
+
+            text-decoration: none;
+
+            color: #16a34a;
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <header class="header">
+
+        <h1>
+            ➕ إضافة مهمة
+        </h1>
+
+        <p>
+            أضف مهمة جديدة إلى يومك
+        </p>
+
+    </header>
+
+
+    <main class="container">
+
+        <div class="card">
+
+
+            <label for="taskName">
+                اسم المهمة
+            </label>
+
+            <input
+                id="taskName"
+                type="text"
+                placeholder="مثال: مذاكرة الرياضيات"
+                maxlength="100"
+            >
+
+
+            <label for="taskDescription">
+                وصف المهمة
+            </label>
+
+            <textarea
+                id="taskDescription"
+                placeholder="اكتب تفاصيل المهمة..."
+                maxlength="500"
+            ></textarea>
+
+
+            <label for="taskTime">
+                الوقت
+            </label>
+
+            <input
+                id="taskTime"
+                type="time"
+            >
+
+
+            <label for="priority">
+                الأولوية
+            </label>
+
+            <select id="priority">
+
+                <option value="high">
+                    🔴 عالية
+                </option>
+
+                <option
+                    value="medium"
+                    selected
+                >
+                    🟡 متوسطة
+                </option>
+
+                <option value="low">
+                    🟢 منخفضة
+                </option>
+
+            </select>
+
+
+            <button
+                class="save-button"
+                onclick="saveTask()"
+            >
+                💾 حفظ المهمة
+            </button>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+
+            <a
+                class="back"
+                href="tasks.html"
+            >
+                ← العودة إلى المهام
+            </a>
+
+
+        </div>
+
+    </main>
+
+
+    <nav class="bottom">
+
+        <a href="index.html">
+            🏠 الرئيسية
+        </a>
+
+        <a href="tasks.html">
+            📋 المهام
+        </a>
+
+        <a href="add-task.html">
+            ➕ إضافة
+        </a>
+
+        <a href="settings.html">
+            ⚙️ الإعدادات
+        </a>
+
+    </nav>
+
+
+    <script>
+
+
+        function getTasks() {
+
+            const saved =
+                localStorage.getItem(
+                    "dailyTasks"
+                );
+
+            if (!saved) {
+
+                return [];
+
+            }
+
+            try {
+
+                return JSON.parse(saved);
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+
+        function saveTask() {
+
+
+            const name =
+                document
+                .getElementById("taskName")
+                .value
+                .trim();
+
+
+            const description =
+                document
+                .getElementById("taskDescription")
+                .value
+                .trim();
+
+
+            const time =
+                document
+                .getElementById("taskTime")
+                .value;
+
+
+            const priority =
+                document
+                .getElementById("priority")
+                .value;
+
+
+            const message =
+                document
+                .getElementById("message");
+
+
+
+            if (name === "") {
+
+                showMessage(
+                    "اكتب اسم المهمة أولًا",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+
+            const tasks =
+                getTasks();
+
+
+
+            const newTask = {
+
+                id:
+                    Date.now(),
+
+                name:
+                    name,
+
+                description:
+                    description,
+
+                time:
+                    time,
+
+                priority:
+                    priority,
+
+                completed:
+                    false,
+
+                createdAt:
+                    new Date().toISOString()
+
+            };
+
+
+
+            tasks.push(newTask);
+
+
+
+            localStorage.setItem(
+
+                "dailyTasks",
+
+                JSON.stringify(tasks)
+
+            );
+
+
+
+            showMessage(
+
+                "تم حفظ المهمة بنجاح ✅",
+
+                "success"
+
+            );
+
+
+
+            document
+                .getElementById("taskName")
+                .value = "";
+
+
+
+            document
+                .getElementById("taskDescription")
+                .value = "";
+
+
+
+            document
+                .getElementById("taskTime")
+                .value = "";
+
+
+
+            document
+                .getElementById("priority")
+                .value = "medium";
+
+        }
+
+
+
+        function showMessage(
+            text,
+            type
+        ) {
+
+            const message =
+                document
+                .getElementById("message");
+
+
+            message.textContent =
+                text;
+
+
+            message.className =
+                "message " + type;
+
+
+            message.style.display =
+                "block";
+
+
+            setTimeout(
+                function() {
+
+                    message.style.display =
+                        "none";
+
+                },
+                3000
+            );
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>

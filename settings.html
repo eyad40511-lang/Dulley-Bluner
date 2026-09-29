@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإعدادات - Daily Tasks</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f8f5;
+            color: #173524;
+            min-height: 100vh;
+            padding-bottom: 85px;
+            transition: 0.3s;
+        }
+
+        body.dark {
+            background: #0f1f16;
+            color: #e7f6ec;
+        }
+
+        header {
+            background: linear-gradient(135deg, #16a34a, #087f3d);
+            color: white;
+            padding: 22px 18px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 25px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 600px;
+            margin: 25px auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            transition: 0.3s;
+        }
+
+        body.dark .card {
+            background: #183022;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .card h2 {
+            color: #087f3d;
+            margin-bottom: 18px;
+            font-size: 20px;
+        }
+
+        body.dark .card h2 {
+            color: #4ade80;
+        }
+
+        .setting {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5eee8;
+        }
+
+        body.dark .setting {
+            border-bottom-color: #2d4938;
+        }
+
+        .setting:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-title {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .setting-description {
+            font-size: 13px;
+            color: #6b7c72;
+            line-height: 1.5;
+        }
+
+        body.dark .setting-description {
+            color: #b4c8ba;
+        }
+
+        /* Toggle */
+        .switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: #cbd5cf;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            right: 3px;
+            top: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .switch input:checked + .slider {
+            background: #16a34a;
+        }
+
+        .switch input:checked + .slider::before {
+            transform: translateX(-24px);
+        }
+
+        .danger {
+            width: 100%;
+            border: none;
+            background: #dc2626;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .danger:hover {
+            background: #b91c1c;
+        }
+
+        .back-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: #16a34a;
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .message {
+            display: none;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        body.dark .message {
+            background: #16452a;
+            color: #86efac;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.08);
+            z-index: 100;
+        }
+
+        body.dark .bottom-nav {
+            background: #14261c;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #6b7c72;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .bottom-nav a.active {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .nav-icon {
+            display: block;
+            font-size: 23px;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>⚙️ الإعدادات</h1>
+</header>
+
+<div class="container">
+
+    <div id="message" class="message">
+        تم حفظ الإعدادات بنجاح ✓
+    </div>
+
+    <div class="card">
+        <h2>إعدادات التطبيق</h2>
+
+        <div class="setting">
+            <div class="setting-info">
+                <div class="setting-title">الإشعارات</div>
+                <div class="setting-description">
+                    السماح للتطبيق بإظهار الإشعارات.
+                </div>
+            </div>
+
+            <label class="switch">
+                <input type="checkbox" id="notifications">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting">
+            <div class="setting-info">
+                <div class="setting-title">التذكيرات</div>
+                <div class="setting-description">
+                    تفعيل تذكيرات المهام اليومية.
+                </div>
+            </div>
+
+            <label class="switch">
+                <input type="checkbox" id="reminders">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting">
+            <div class="setting-info">
+                <div class="setting-title">الوضع الداكن</div>
+                <div class="setting-description">
+                    تغيير شكل التطبيق إلى الوضع الداكن.
+                </div>
+            </div>
+
+            <label class="switch">
+                <input type="checkbox" id="darkMode">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>إدارة البيانات</h2>
+
+        <div class="setting">
+            <div class="setting-info">
+                <div class="setting-title">حذف جميع المهام</div>
+                <div class="setting-description">
+                    سيتم حذف جميع المهام المحفوظة من التطبيق.
+                </div>
+            </div>
+        </div>
+
+        <button class="danger" onclick="deleteAllTasks()">
+            🗑️ حذف جميع المهام
+        </button>
+    </div>
+
+    <a href="index.html" class="back-btn">
+        ← العودة للرئيسية
+    </a>
+
+</div>
+
+<nav class="bottom-nav">
+    <a href="index.html">
+        <span class="nav-icon">🏠</span>
+        الرئيسية
+    </a>
+
+    <a href="tasks.html">
+        <span class="nav-icon">📋</span>
+        المهام
+    </a>
+
+    <a href="add-task.html">
+        <span class="nav-icon">➕</span>
+        إضافة
+    </a>
+
+    <a href="settings.html" class="active">
+        <span class="nav-icon">⚙️</span>
+        الإعدادات
+    </a>
+</nav>
+
+<script>
+    const notifications = document.getElementById("notifications");
+    const reminders = document.getElementById("reminders");
+    const darkMode = document.getElementById("darkMode");
+    const message = document.getElementById("message");
+
+    // Load saved settings
+    function loadSettings() {
+        notifications.checked =
+            localStorage.getItem("notifications") === "true";
+
+        reminders.checked =
+            localStorage.getItem("reminders") === "true";
+
+        darkMode.checked =
+            localStorage.getItem("darkMode") === "true";
+
+        applyDarkMode();
+    }
+
+    // Save setting
+    function saveSetting(key, value) {
+        localStorage.setItem(key, value);
+        showMessage();
+    }
+
+    // Show success message
+    function showMessage() {
+        message.style.display = "block";
+
+        setTimeout(() => {
+            message.style.display = "none";
+        }, 1800);
+    }
+
+    // Dark mode
+    function applyDarkMode() {
+        if (darkMode.checked) {
+            document.body.classList.add("dark");
+        } else {
+            document.body.classList.remove("dark");
+        }
+    }
+
+    notifications.addEventListener("change", function () {
+        saveSetting("notifications", this.checked);
+    });
+
+    reminders.addEventListener("change", function () {
+        saveSetting("reminders", this.checked);
+    });
+
+    darkMode.addEventListener("change", function () {
+        localStorage.setItem("darkMode", this.checked);
+        applyDarkMode();
+        showMessage();
+    });
+
+    // Delete all tasks
+    function deleteAllTasks() {
+        const answer = confirm(
+            "هل أنت متأكد أنك تريد حذف جميع المهام؟"
+        );
+
+        if (answer) {
+            localStorage.removeItem("dailyTasks");
+
+            showMessage();
+            message.textContent = "تم حذف جميع المهام ✓";
+        }
+    }
+
+    loadSettings();
+</script>
+
+</body>
+</html>

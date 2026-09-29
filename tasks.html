@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>المهام - Daily Tasks</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #eef3f0;
+            color: #173524;
+            min-height: 100vh;
+            padding-bottom: 85px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #16a34a, #087f3d);
+            color: white;
+            padding: 22px 18px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 25px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 650px;
+            margin: 25px auto;
+        }
+
+        .top-box {
+            background: white;
+            padding: 18px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .top-box h2 {
+            color: #087f3d;
+            margin-bottom: 6px;
+        }
+
+        .top-box p {
+            color: #6b7c72;
+            font-size: 14px;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+        }
+
+        .task-card.completed {
+            opacity: 0.65;
+        }
+
+        .task-check {
+            width: 22px;
+            height: 22px;
+            accent-color: #16a34a;
+            margin-top: 3px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #173524;
+            word-break: break-word;
+        }
+
+        .completed .task-name {
+            text-decoration: line-through;
+        }
+
+        .task-description {
+            color: #6b7c72;
+            font-size: 14px;
+            margin-top: 7px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .task-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 10px;
+        }
+
+        .badge {
+            padding: 6px 9px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #e8f7ed;
+            color: #087f3d;
+        }
+
+        .priority-high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .priority-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .priority-low {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .delete-btn {
+            border: none;
+            background: #fee2e2;
+            color: #dc2626;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            background: #fecaca;
+        }
+
+        .empty {
+            background: white;
+            border-radius: 18px;
+            padding: 45px 20px;
+            text-align: center;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .empty h2 {
+            color: #087f3d;
+            margin-bottom: 8px;
+        }
+
+        .empty p {
+            color: #6b7c72;
+            margin-bottom: 20px;
+        }
+
+        .add-btn {
+            display: inline-block;
+            background: #16a34a;
+            color: white;
+            text-decoration: none;
+            padding: 13px 22px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.08);
+            z-index: 100;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #6b7c72;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .bottom-nav a.active {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .nav-icon {
+            display: block;
+            font-size: 23px;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>📋 مهامي</h1>
+</header>
+
+<div class="container">
+
+    <div class="top-box">
+        <h2>قائمة المهام</h2>
+        <p id="taskCount">جارٍ تحميل المهام...</p>
+    </div>
+
+    <div id="tasksContainer"></div>
+
+</div>
+
+<nav class="bottom-nav">
+
+    <a href="index.html">
+        <span class="nav-icon">🏠</span>
+        الرئيسية
+    </a>
+
+    <a href="tasks.html" class="active">
+        <span class="nav-icon">📋</span>
+        المهام
+    </a>
+
+    <a href="add-task.html">
+        <span class="nav-icon">➕</span>
+        إضافة
+    </a>
+
+    <a href="settings.html">
+        <span class="nav-icon">⚙️</span>
+        الإعدادات
+    </a>
+
+</nav>
+
+<script>
+
+    const tasksContainer = document.getElementById("tasksContainer");
+    const taskCount = document.getElementById("taskCount");
+
+    function getTasks() {
+        try {
+            return JSON.parse(
+                localStorage.getItem("dailyTasks")
+            ) || [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function saveTasks(tasks) {
+        localStorage.setItem(
+            "dailyTasks",
+            JSON.stringify(tasks)
+        );
+    }
+
+    function escapeHTML(text) {
+        const div = document.createElement("div");
+        div.textContent = text || "";
+        return div.innerHTML;
+    }
+
+    function getPriorityClass(priority) {
+
+        if (priority === "عالية") {
+            return "priority-high";
+        }
+
+        if (priority === "متوسطة") {
+            return "priority-medium";
+        }
+
+        return "priority-low";
+    }
+
+    function renderTasks() {
+
+        const tasks = getTasks();
+
+        if (tasks.length === 0) {
+
+            taskCount.textContent = "لا توجد مهام حاليًا";
+
+            tasksContainer.innerHTML = `
+                <div class="empty">
+
+                    <div class="empty-icon">📝</div>
+
+                    <h2>لا توجد مهام</h2>
+
+                    <p>
+                        ابدأ بإضافة أول مهمة لك.
+                    </p>
+
+                    <a href="add-task.html" class="add-btn">
+                        ➕ إضافة مهمة
+                    </a>
+
+                </div>
+            `;
+
+            return;
+        }
+
+        const completed = tasks.filter(
+            task => task.completed
+        ).length;
+
+        taskCount.textContent =
+            `لديك ${tasks.length} مهام • تم إنجاز ${completed}`;
+
+        tasksContainer.innerHTML = "";
+
+        tasks.forEach(task => {
+
+            const card = document.createElement("div");
+
+            card.className =
+                "task-card" +
+                (task.completed ? " completed" : "");
+
+            card.innerHTML = `
+
+                <input
+                    type="checkbox"
+                    class="task-check"
+                    ${task.completed ? "checked" : ""}
+                    onchange="toggleTask(${task.id})"
+                >
+
+                <div class="task-content">
+
+                    <div class="task-name">
+                        ${escapeHTML(task.name)}
+                    </div>
+
+                    ${
+                        task.description
+                        ?
+                        `
+                        <div class="task-description">
+                            ${escapeHTML(task.description)}
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
+                    <div class="task-info">
+
+                        ${
+                            task.time
+                            ?
+                            `
+                            <span class="badge">
+                                🕐 ${escapeHTML(task.time)}
+                            </span>
+                            `
+                            :
+                            ""
+                        }
+
+                        ${
+                            task.priority
+                            ?
+                            `
+                            <span class="badge ${getPriorityClass(task.priority)}">
+                                ⭐ ${escapeHTML(task.priority)}
+                            </span>
+                            `
+                            :
+                            ""
+                        }
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteTask(${task.id})"
+                    title="حذف المهمة"
+                >
+                    🗑️
+                </button>
+            `;
+
+            tasksContainer.appendChild(card);
+        });
+    }
+
+    function toggleTask(id) {
+
+        const tasks = getTasks();
+
+        const task = tasks.find(
+            task => task.id === id
+        );
+
+        if (task) {
+            task.completed = !task.completed;
+            saveTasks(tasks);
+            renderTasks();
+        }
+    }
+
+    function deleteTask(id) {
+
+        const confirmed = confirm(
+            "هل تريد حذف هذه المهمة؟"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        const tasks = getTasks();
+
+        const newTasks = tasks.filter(
+            task => task.id !== id
+        );
+
+        saveTasks(newTasks);
+
+        renderTasks();
+    }
+
+    renderTasks();
+
+</script>
+
+</body>
+</html>
